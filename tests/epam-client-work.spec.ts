@@ -1,10 +1,13 @@
-import { test, expect } from '@playwright/test';
+import { expect, test } from '@playwright/test';
 
 test('EPAM Client Work navigation', async ({ page }) => {
-  await page.goto('https://www.epam.com/');
+  await page.goto('/');
 
-  await page.locator('header').getByRole('link', { name: 'Services', exact: true }).click({ force: true });
-  await page.getByRole('link', { name: 'Explore Our Client Work', exact: true }).click();
+  await page.locator('header').getByRole('link', { name: /Services/i }).click({ force: true });
 
-  await expect(page.getByText('Client Work', { exact: true })).toBeVisible();
+  const clientWorkLink = page.getByRole('link', { name: /Explore Our Client Work/i });
+  await expect(clientWorkLink).toBeVisible();
+  await clientWorkLink.click();
+
+  await expect(page.getByText('Client Work', { exact: false })).toBeVisible();
 });
